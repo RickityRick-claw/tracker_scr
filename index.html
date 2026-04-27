@@ -1,1 +1,1247 @@
-<!DOCTYPE html><html><body><h1>Vijayabhava Premium</h1><p>Use same browser for saved progress.</p></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BankPrep Pro — SBI & IBPS 2026 Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#080e1c;--navy-mid:#0f1728;--navy-l:#18243c;
+  --gold:#c9a84c;--gold-l:#e6c96a;--gold-dim:#7a6228;
+  --cream:#f0ebe0;--cream-dim:#8a8070;
+  --red:#e05555;--green:#4cbe82;--blue:#5b8af5;
+  --purple:#9b6dff;--orange:#f0934a;
+  --card:rgba(15,23,40,0.92);--border:rgba(201,168,76,0.18);--glow:rgba(201,168,76,0.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 15% 15%,rgba(201,168,76,.06),transparent 55%),radial-gradient(ellipse at 85% 85%,rgba(91,138,245,.05),transparent 55%);pointer-events:none;z-index:0}
+.layout{display:flex;min-height:100vh;position:relative;z-index:1}
+
+/* SIDEBAR */
+.sidebar{width:68px;background:var(--navy-mid);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:16px 0;position:fixed;top:0;left:0;height:100vh;z-index:100;transition:width .3s ease;overflow:hidden}
+.sidebar:hover{width:210px}
+.sb-logo{padding:0 16px;margin-bottom:28px;overflow:hidden;white-space:nowrap}
+.sb-logo .logo-icon{font-size:28px;display:block;text-align:center}
+.sb-logo .logo-text{font-family:'Playfair Display',serif;font-size:16px;color:var(--gold);display:none;margin-top:2px}
+.sb-logo .logo-sub{font-size:10px;color:var(--cream-dim);display:none}
+.sidebar:hover .logo-text,.sidebar:hover .logo-sub{display:block}
+.nav-item{display:flex;align-items:center;gap:14px;width:100%;padding:13px 22px;cursor:pointer;transition:all .2s;border-left:3px solid transparent;white-space:nowrap;color:var(--cream-dim);font-size:13.5px;font-weight:500;text-decoration:none}
+.nav-item:hover,.nav-item.active{background:var(--glow);border-left-color:var(--gold);color:var(--gold)}
+.nav-icon{font-size:18px;flex-shrink:0;width:24px;text-align:center}
+.nav-label{opacity:0;transition:opacity .2s}
+.sidebar:hover .nav-label{opacity:1}
+.sb-spacer{flex:1}
+
+/* MAIN */
+.main{margin-left:68px;flex:1;padding:24px 28px;min-height:100vh}
+.page{display:none;animation:fadeIn .25s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;backdrop-filter:blur(12px);position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.4),transparent)}
+.card-title{font-family:'Playfair Display',serif;font-size:16px;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+
+/* PAGE HEADER */
+.ph{margin-bottom:22px}
+.ph h1{font-family:'Playfair Display',serif;font-size:26px;color:var(--cream)}
+.ph p{color:var(--cream-dim);font-size:13px;margin-top:4px}
+
+/* COUNTDOWN */
+.cd-grid{display:flex;gap:10px;flex-wrap:wrap}
+.cd-item{text-align:center;background:rgba(201,168,76,.05);border:1px solid var(--border);border-radius:12px;padding:14px 18px;flex:1;min-width:90px}
+.cd-days{font-family:'Playfair Display',serif;font-size:30px;font-weight:700}
+.cd-exam{font-size:10px;color:var(--cream-dim);margin-top:2px;text-transform:uppercase;letter-spacing:.8px}
+.cd-phase{font-size:9px;color:var(--gold-dim);text-transform:uppercase;letter-spacing:.5px}
+
+/* QUOTE */
+.quote-card{background:linear-gradient(135deg,rgba(201,168,76,.06),rgba(91,138,245,.06));border:1px solid var(--border);border-radius:16px;padding:22px;position:relative}
+.quote-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.4),transparent)}
+.qt{font-family:'Playfair Display',serif;font-style:italic;font-size:17px;color:var(--cream);line-height:1.65}
+.qa{font-size:12px;color:var(--gold);margin-top:10px}
+
+/* KITTY */
+.kitty-wrap{position:fixed;bottom:22px;right:22px;z-index:500;cursor:pointer;user-select:none}
+.kitty{position:relative;width:56px;height:62px;animation:kbob 3s ease-in-out infinite}
+.k-body{width:44px;height:36px;background:#f5c05a;border-radius:50% 50% 44% 44%;position:absolute;bottom:0;left:6px;box-shadow:inset -4px -3px 8px rgba(0,0,0,.12)}
+.k-head{width:40px;height:36px;background:#f5c05a;border-radius:50%;position:absolute;top:0;left:8px;box-shadow:inset -3px -2px 6px rgba(0,0,0,.1)}
+.k-ear{position:absolute;top:-10px;width:0;height:0}
+.k-ear.l{left:6px;border:0 solid transparent;border-right:7px solid transparent;border-left:7px solid transparent;border-bottom:12px solid #f5c05a}
+.k-ear.r{right:6px;border:0 solid transparent;border-right:7px solid transparent;border-left:7px solid transparent;border-bottom:12px solid #f5c05a}
+.k-eye{width:7px;height:7px;background:#2a2a3a;border-radius:50%;position:absolute;top:13px;animation:kblink 4.5s ease-in-out infinite}
+.k-eye.l{left:8px}.k-eye.r{right:8px}
+.k-nose{width:6px;height:4px;background:#ffaaaa;border-radius:50%;position:absolute;top:22px;left:50%;transform:translateX(-50%)}
+.k-wh{position:absolute;top:24px;height:1px;background:rgba(150,140,120,.5);width:12px}
+.k-wh.l{left:2px}.k-wh.r{right:2px}
+.k-tail{width:5px;height:26px;background:#f5c05a;border-radius:3px;position:absolute;bottom:0;right:0;transform-origin:bottom;animation:ktail 2.2s ease-in-out infinite}
+.k-bubble{position:absolute;bottom:72px;right:0;background:var(--navy-mid);border:1px solid var(--border);border-radius:12px 12px 0 12px;padding:8px 12px;font-size:12px;white-space:nowrap;display:none;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.kitty-wrap:hover .k-bubble{display:block}
+@keyframes kbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes kblink{0%,88%,100%{transform:scaleY(1)}94%{transform:scaleY(.1)}}
+@keyframes ktail{0%,100%{transform:rotate(-18deg)}50%{transform:rotate(18deg)}}
+
+/* STREAKS */
+.streak-val{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--orange)}
+
+/* FORMS */
+.fg{margin-bottom:14px}
+.fl{font-size:11px;color:var(--cream-dim);text-transform:uppercase;letter-spacing:.9px;margin-bottom:5px;display:block}
+input,select,textarea{width:100%;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:9px 13px;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:13.5px;transition:border-color .2s;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+select option{background:var(--navy-mid)}
+.btn{padding:9px 18px;border-radius:8px;border:none;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-gold{background:var(--gold);color:var(--navy)}
+.btn-gold:hover{background:var(--gold-l);transform:translateY(-1px);box-shadow:0 4px 16px rgba(201,168,76,.3)}
+.btn-outline{background:transparent;border:1px solid var(--gold);color:var(--gold)}
+.btn-outline:hover{background:var(--glow)}
+.btn-sm{padding:5px 12px;font-size:12px}
+
+/* BADGE */
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.bg{background:rgba(201,168,76,.18);color:var(--gold)}
+.bgreen{background:rgba(76,190,130,.18);color:var(--green)}
+.bred{background:rgba(224,85,85,.18);color:var(--red)}
+.bblue{background:rgba(91,138,245,.18);color:var(--blue)}
+.bpurple{background:rgba(155,109,255,.18);color:var(--purple)}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse}
+th{font-size:10.5px;text-transform:uppercase;letter-spacing:.9px;color:var(--cream-dim);padding:9px 11px;text-align:left;border-bottom:1px solid var(--border)}
+td{padding:9px 11px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04)}
+tr:hover td{background:rgba(255,255,255,.015)}
+
+/* TABS */
+.tab-bar{display:flex;gap:4px;margin-bottom:18px;background:rgba(255,255,255,.025);border-radius:10px;padding:4px}
+.tab-btn{flex:1;padding:8px 14px;border-radius:7px;border:none;background:transparent;color:var(--cream-dim);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+.tab-btn.active{background:rgba(201,168,76,.14);color:var(--gold)}
+
+/* CHAPTERS */
+.ch-list{list-style:none}
+.ch-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .15s}
+.ch-item:hover{padding-left:4px}
+.ch-item input[type=checkbox]{width:15px;height:15px;flex-shrink:0;accent-color:var(--gold);cursor:pointer}
+.ch-item.done span{text-decoration:line-through;color:var(--cream-dim)}
+
+/* PROG BAR */
+.pb-wrap{background:rgba(255,255,255,.08);border-radius:100px;height:7px;overflow:hidden;margin-top:6px}
+.pb{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--gold-dim),var(--gold));transition:width .8s ease}
+
+/* CALENDAR */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-top:12px}
+.cal-d{aspect-ratio:1;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;transition:all .15s;position:relative}
+.cal-d:hover{background:var(--glow)}
+.cal-d.today{border:1px solid var(--gold);color:var(--gold);font-weight:600}
+.cal-d.studied{background:rgba(76,190,130,.2)}
+.cal-d.missed{background:rgba(224,85,85,.15)}
+.cal-d.partial{background:rgba(240,147,74,.15)}
+.cal-d.hd{font-size:10px;color:var(--cream-dim);font-weight:600;cursor:default}
+
+/* CHAT */
+.chat-box{height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-right:2px}
+.chat-box::-webkit-scrollbar{width:3px}
+.chat-box::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.cm{padding:11px 14px;border-radius:10px;font-size:13.5px;line-height:1.55;max-width:88%}
+.cm.user{background:rgba(201,168,76,.13);border:1px solid rgba(201,168,76,.18);align-self:flex-end}
+.cm.bot{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);align-self:flex-start}
+.chat-row{display:flex;gap:8px;margin-top:10px}
+.chat-row input{flex:1}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:800;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--navy-mid);border:1px solid var(--border);border-radius:20px;padding:30px;width:90%;max-width:480px}
+.modal h2{font-family:'Playfair Display',serif;color:var(--gold);margin-bottom:18px;font-size:20px}
+
+/* TOAST */
+.toast{position:fixed;top:18px;right:18px;background:var(--navy-mid);border:1px solid var(--gold);border-radius:10px;padding:12px 18px;z-index:1000;font-size:13.5px;animation:tin .3s ease;pointer-events:none}
+@keyframes tin{from{transform:translateX(110%);opacity:0}to{transform:none;opacity:1}}
+
+/* SCORE BIG */
+.sbig{font-family:'Playfair Display',serif;font-size:40px;font-weight:700;color:var(--gold);line-height:1}
+
+/* PENALTY */
+.pen-bar{background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.25);border-radius:10px;padding:14px;margin-top:14px}
+
+/* DESC ITEM */
+.di{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(201,168,76,.25);border-radius:3px}
+
+@media(max-width:768px){
+  .g4{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:1fr 1fr}
+  .g2{grid-template-columns:1fr}
+  .cd-grid{flex-wrap:wrap}
+  .main{padding:14px}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="sb-logo">
+    <span class="logo-icon">🏦</span>
+    <div class="logo-text">BankPrep Pro</div>
+    <div class="logo-sub">SBI · IBPS · 2026</div>
+  </div>
+  <div class="nav-item active" onclick="go('dashboard')" data-page="dashboard"><span class="nav-icon">🏠</span><span class="nav-label">Dashboard</span></div>
+  <div class="nav-item" onclick="go('daily')" data-page="daily"><span class="nav-icon">📅</span><span class="nav-label">Daily Log</span></div>
+  <div class="nav-item" onclick="go('mock')" data-page="mock"><span class="nav-icon">📊</span><span class="nav-label">Mock Scores</span></div>
+  <div class="nav-item" onclick="go('chapters')" data-page="chapters"><span class="nav-icon">📚</span><span class="nav-label">Chapter Tracker</span></div>
+  <div class="nav-item" onclick="go('descriptive')" data-page="descriptive"><span class="nav-icon">✍️</span><span class="nav-label">Descriptive Writing</span></div>
+  <div class="nav-item" onclick="go('calendar')" data-page="calendar"><span class="nav-icon">📆</span><span class="nav-label">Monthly View</span></div>
+  <div class="nav-item" onclick="go('instructor')" data-page="instructor"><span class="nav-icon">🤖</span><span class="nav-label">AI Instructor</span></div>
+  <div class="sb-spacer"></div>
+  <div class="nav-item" onclick="openSettings()"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- ═══ DASHBOARD ═══ -->
+<section class="page active" id="page-dashboard">
+  <div class="ph">
+    <h1 id="greeting">Good Morning, Champion! 👑</h1>
+    <p id="date-display"></p>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">⏱️ Days Until Your Exams</div>
+    <div class="cd-grid" id="countdown-row"></div>
+  </div>
+
+  <div class="g2" style="margin-bottom:16px;align-items:start">
+    <div class="quote-card">
+      <div style="font-size:28px;margin-bottom:10px">💬</div>
+      <div class="qt" id="daily-quote">Loading...</div>
+      <div class="qa" id="quote-author"></div>
+      <div style="margin-top:14px;display:flex;gap:8px;align-items:center">
+        <span class="badge bg" id="quote-date"></span>
+        <button class="btn btn-outline btn-sm" onclick="nextQuote()">Next Quote →</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔥 Your Streaks</div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div>
+          <div style="font-size:12px;color:var(--cream-dim);margin-bottom:3px">Study Streak</div>
+          <div style="display:flex;align-items:baseline;gap:6px"><span class="streak-val" id="study-streak">0</span><span style="font-size:22px">🔥</span><span style="font-size:12px;color:var(--cream-dim)">days</span></div>
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--cream-dim);margin-bottom:3px">Gym Streak</div>
+          <div style="display:flex;align-items:baseline;gap:6px"><span class="streak-val" style="color:var(--green)" id="gym-streak">0</span><span style="font-size:22px">💪</span><span style="font-size:12px;color:var(--cream-dim)">days</span></div>
+        </div>
+        <div style="padding-top:10px;border-top:1px solid var(--border)">
+          <div style="font-size:12px;color:var(--cream-dim);margin-bottom:3px">Penalty Points</div>
+          <div style="font-family:'Playfair Display',serif;font-size:26px;color:var(--red)" id="pen-total-dash">0 pts</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">📈 Today's Progress</div>
+    <div class="g4">
+      <div style="text-align:center;padding:12px 0">
+        <div style="font-family:'Playfair Display',serif;font-size:34px;color:var(--blue)" id="d-hours">—</div>
+        <div style="font-size:11px;color:var(--cream-dim);margin-top:4px">Study Hours</div>
+      </div>
+      <div style="text-align:center;padding:12px 0">
+        <div style="font-family:'Playfair Display',serif;font-size:34px;color:var(--purple)" id="d-chapters">—</div>
+        <div style="font-size:11px;color:var(--cream-dim);margin-top:4px">Chapters Done</div>
+      </div>
+      <div style="text-align:center;padding:12px 0">
+        <div style="font-family:'Playfair Display',serif;font-size:34px" id="d-gym">—</div>
+        <div style="font-size:11px;color:var(--cream-dim);margin-top:4px">Gym (45 min)</div>
+      </div>
+      <div style="text-align:center;padding:12px 0">
+        <div style="font-family:'Playfair Display',serif;font-size:34px;color:var(--orange)" id="d-mock">—</div>
+        <div style="font-size:11px;color:var(--cream-dim);margin-top:4px">Latest Mock %</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-title">🎯 Focus Areas to Improve</div>
+      <div id="focus-areas"><div style="color:var(--cream-dim);font-size:13px">Log daily study + 2+ mock tests to see AI-driven focus areas.</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📋 Today's Quick To-Do</div>
+      <div id="q-todos" style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px"></div>
+      <div style="display:flex;gap:6px">
+        <input type="text" id="q-todo-inp" placeholder="Add a quick task..." onkeypress="if(event.key==='Enter')addQTodo()">
+        <button class="btn btn-gold" onclick="addQTodo()">+</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DAILY LOG ═══ -->
+<section class="page" id="page-daily">
+  <div class="ph"><h1>📅 Daily Study Log</h1><p>Track every session — hours, chapters, gym, subjects, penalties</p></div>
+  <div class="g2" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-title">📝 Log Today's Session</div>
+      <div class="fg"><label class="fl">Date</label><input type="date" id="l-date"></div>
+      <div class="fg"><label class="fl">Study Hours</label><input type="number" id="l-hours" placeholder="e.g. 6.5" min="0" max="24" step="0.5"></div>
+      <div class="fg">
+        <label class="fl">Subjects Studied</label>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px" id="subj-check">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="English" style="accent-color:var(--blue);width:14px;height:14px"> English</label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="Quantitative" style="accent-color:var(--purple);width:14px;height:14px"> Quantitative</label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="Reasoning" style="accent-color:var(--green);width:14px;height:14px"> Reasoning</label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="GK/Banking" style="accent-color:var(--orange);width:14px;height:14px"> GK/Banking</label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="Computer" style="accent-color:var(--red);width:14px;height:14px"> Computer</label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="Descriptive" style="accent-color:var(--gold);width:14px;height:14px"> Descriptive</label>
+        </div>
+      </div>
+      <div class="fg"><label class="fl">Chapters Completed (count)</label><input type="number" id="l-chapters" placeholder="e.g. 3" min="0"></div>
+      <div class="fg">
+        <label class="fl">Gym Session (45 min)</label>
+        <div style="display:flex;gap:18px;margin-top:6px">
+          <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px"><input type="radio" name="gym" value="yes" style="accent-color:var(--green)"> ✅ Done!</label>
+          <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px"><input type="radio" name="gym" value="no" checked style="accent-color:var(--red)"> ❌ Skipped</label>
+          <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px"><input type="radio" name="gym" value="rest" style="accent-color:var(--orange)"> 😴 Rest Day</label>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">Day Type</label>
+        <select id="l-daytype">
+          <option value="full">✅ Full Day — Completed Target</option>
+          <option value="partial">⚠️ Partial Day — Some Progress</option>
+          <option value="missed">❌ Missed Day — No Study</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Notes & Side Notes</label><textarea id="l-notes" rows="3" placeholder="What did you study? Challenges faced? Topics for next day..."></textarea></div>
+      <button class="btn btn-gold" style="width:100%" onclick="saveLog()">💾 Save Today's Log</button>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-title">📋 To-Do List</div>
+        <div id="todo-list" style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px;max-height:240px;overflow-y:auto"></div>
+        <div style="display:flex;gap:6px">
+          <input type="text" id="todo-inp" placeholder="Add task..." onkeypress="if(event.key==='Enter')addTodo()">
+          <select id="todo-type" style="width:90px;padding:9px 8px">
+            <option value="today">Today</option>
+            <option value="week">This Week</option>
+          </select>
+          <button class="btn btn-gold" onclick="addTodo()">+</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">⚠️ Penalty System</div>
+        <div style="font-size:12px;color:var(--cream-dim);line-height:1.7;margin-bottom:12px">
+          Penalties track missed commitments automatically when you log a day.<br>
+          ❌ Missed study day: <strong style="color:var(--red)">+5 pts</strong> &nbsp;|&nbsp;
+          😴 &lt;4h study: <strong style="color:var(--orange)">+3 pts</strong> &nbsp;|&nbsp;
+          🚫 Skipped gym: <strong style="color:var(--red)">+2 pts</strong>
+        </div>
+        <div id="pen-log" style="display:flex;flex-direction:column;gap:6px"></div>
+        <div class="pen-bar" style="margin-top:12px">
+          <div style="font-size:14px;color:var(--red);font-weight:600">Total: <span id="pen-total">0</span> penalty points</div>
+          <div style="font-size:11px;color:var(--cream-dim);margin-top:4px">Reduce by logging consistent full days & gym sessions 💪</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">📜 Log History (Last 30 days)</div>
+    <div style="overflow-x:auto"><table><thead><tr><th>Date</th><th>Hours</th><th>Subjects</th><th>Chapters</th><th>Gym</th><th>Day Type</th><th>Penalties</th><th>Notes</th></tr></thead><tbody id="log-tbody"></tbody></table></div>
+  </div>
+</section>
+
+<!-- ═══ MOCK SCORES ═══ -->
+<section class="page" id="page-mock">
+  <div class="ph"><h1>📊 Mock Test Tracker</h1><p>Separate tracking for SBI & IBPS — Prelims and Mains with section-wise analysis</p></div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchMock('SBI PO')">SBI PO</button>
+    <button class="tab-btn" onclick="switchMock('SBI Clerk')">SBI Clerk</button>
+    <button class="tab-btn" onclick="switchMock('IBPS PO')">IBPS PO</button>
+    <button class="tab-btn" onclick="switchMock('IBPS Clerk')">IBPS Clerk</button>
+  </div>
+  <div class="g2" style="margin-bottom:16px;align-items:start">
+    <div class="card">
+      <div class="card-title">➕ Add Mock Score</div>
+      <div class="fg"><label class="fl">Phase</label><select id="m-phase" onchange="updateSecFields()"><option>Prelims</option><option>Mains</option></select></div>
+      <div class="fg"><label class="fl">Date</label><input type="date" id="m-date"></div>
+      <div class="fg">
+        <label class="fl">Total Score / Max Score</label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input type="number" id="m-score" placeholder="Your Score" style="flex:1">
+          <span style="color:var(--cream-dim);flex-shrink:0">/</span>
+          <input type="number" id="m-max" placeholder="Max" style="width:80px" value="100">
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">Section-wise Scores</label>
+        <div id="sec-fields" style="display:grid;gap:8px;margin-top:4px"></div>
+      </div>
+      <div class="fg"><label class="fl">Mock Platform</label><input type="text" id="m-prov" placeholder="e.g. Testbook, Oliveboard, ixamBee..."></div>
+      <div class="fg"><label class="fl">Your Rank (optional)</label><input type="number" id="m-rank" placeholder="e.g. 1842"></div>
+      <div class="fg"><label class="fl">Weak Areas / Notes</label><textarea id="m-notes" rows="2" placeholder="What went wrong? What was strong?"></textarea></div>
+      <button class="btn btn-gold" style="width:100%" onclick="saveMock()">💾 Save Score</button>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-title">📈 Performance Summary — <span id="mock-exam-label">SBI PO</span></div>
+        <div id="mock-summary" style="display:grid;grid-template-columns:1fr 1fr;gap:14px"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🎯 Section Averages</div>
+        <div id="sec-avgs"></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title" id="mock-hist-title">📋 Score History — SBI PO</div>
+    <div style="overflow-x:auto"><table><thead><tr><th>Date</th><th>Phase</th><th>Score</th><th>%</th><th>Sections</th><th>Rank</th><th>Platform</th><th>Notes</th></tr></thead><tbody id="mock-tbody"></tbody></table></div>
+  </div>
+</section>
+
+<!-- ═══ CHAPTERS ═══ -->
+<section class="page" id="page-chapters">
+  <div class="ph"><h1>📚 Chapter & Syllabus Tracker</h1><p>Track your syllabus coverage — tick off topics as you master them</p></div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchChap('prelims')">Prelims (All Exams)</button>
+    <button class="tab-btn" onclick="switchChap('mains-po')">Mains — PO (SBI & IBPS)</button>
+    <button class="tab-btn" onclick="switchChap('mains-clerk')">Mains — Clerk</button>
+  </div>
+  <div id="chap-content"></div>
+</section>
+
+<!-- ═══ DESCRIPTIVE ═══ -->
+<section class="page" id="page-descriptive">
+  <div class="ph"><h1>✍️ Descriptive Writing Tracker</h1><p>Essay & email writing — bi-weekly reminders keep you exam-ready</p></div>
+  <div class="g2" style="margin-bottom:16px;align-items:start">
+    <div class="card">
+      <div class="card-title">📝 Log a Writing Task</div>
+      <div class="fg"><label class="fl">Type</label><select id="desc-type"><option>Essay Writing</option><option>Email Writing</option><option>Formal Letter Writing</option><option>Précis Writing</option><option>Report Writing</option></select></div>
+      <div class="fg"><label class="fl">Topic</label><input type="text" id="desc-topic" placeholder="e.g. Role of Digital Banking in Financial Inclusion"></div>
+      <div class="fg"><label class="fl">Date</label><input type="date" id="desc-date"></div>
+      <div class="fg"><label class="fl">Word Count Written</label><input type="number" id="desc-words" placeholder="e.g. 250"></div>
+      <div class="fg"><label class="fl">Self-Rating (1–10)</label><input type="number" id="desc-rating" min="1" max="10" placeholder="7"></div>
+      <div class="fg"><label class="fl">Time Taken (mins)</label><input type="number" id="desc-time" placeholder="e.g. 25"></div>
+      <div class="fg"><label class="fl">Feedback / Areas to Improve</label><textarea id="desc-notes" rows="2" placeholder="Weak on: vocabulary, structure, examples..."></textarea></div>
+      <button class="btn btn-gold" style="width:100%" onclick="saveDesc()">💾 Save Writing Task</button>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-title">⏰ Bi-Weekly Reminders</div>
+        <div id="desc-reminders"></div>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-title">💡 Topic Bank</div>
+        <div style="font-size:12px;color:var(--cream-dim);line-height:1.8">
+          <strong style="color:var(--gold)">Essay Topics:</strong> Financial Inclusion · Digital India · Role of RBI · NPAs in Banking · Cashless Economy · Women Empowerment · Climate Finance<br>
+          <strong style="color:var(--gold)">Email/Letter Topics:</strong> Complaint to Bank Manager · Requesting Loan · Reporting Fraud · Job Application · Formal Request Letter
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📊 Writing Stats</div>
+        <div id="desc-stats"></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">📜 Writing History</div>
+    <div style="overflow-x:auto"><table><thead><tr><th>Date</th><th>Type</th><th>Topic</th><th>Words</th><th>Time</th><th>Rating</th><th>Notes</th></tr></thead><tbody id="desc-tbody"></tbody></table></div>
+  </div>
+</section>
+
+<!-- ═══ CALENDAR ═══ -->
+<section class="page" id="page-calendar">
+  <div class="ph"><h1>📆 Monthly Performance View</h1><p>Your consistency at a glance — colour-coded heatmap</p></div>
+  <div class="g2" style="align-items:start">
+    <div class="card">
+      <div class="card-title" style="justify-content:space-between">
+        <span id="cal-title">Loading...</span>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-outline btn-sm" onclick="prevMonth()">← Prev</button>
+          <button class="btn btn-outline btn-sm" onclick="nextMonth()">Next →</button>
+        </div>
+      </div>
+      <div class="cal-grid" id="month-grid"></div>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:16px">
+        <div style="display:flex;align-items:center;gap:6px;font-size:11.5px"><div style="width:11px;height:11px;background:rgba(76,190,130,.25);border-radius:3px"></div>Full Day (≥6h)</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11.5px"><div style="width:11px;height:11px;background:rgba(240,147,74,.25);border-radius:3px"></div>Partial</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11.5px"><div style="width:11px;height:11px;background:rgba(224,85,85,.2);border-radius:3px"></div>Missed</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11.5px">💪 = Gym Done</div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-title">📊 Monthly Stats</div>
+        <div id="monthly-stats" style="display:grid;gap:11px"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🏆 Performance Key</div>
+        <div style="display:grid;gap:7px;font-size:13px">
+          <div style="padding:9px 12px;border-radius:8px;background:rgba(76,190,130,.08);border:1px solid rgba(76,190,130,.25)"><strong style="color:var(--green)">🟢 On Track</strong> — ≥6h study + gym + full day logged</div>
+          <div style="padding:9px 12px;border-radius:8px;background:rgba(240,147,74,.08);border:1px solid rgba(240,147,74,.25)"><strong style="color:var(--orange)">🟡 Partial</strong> — 3–6h study or missed gym</div>
+          <div style="padding:9px 12px;border-radius:8px;background:rgba(224,85,85,.08);border:1px solid rgba(224,85,85,.25)"><strong style="color:var(--red)">🔴 Off Track</strong> — &lt;3h or marked as missed day</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ INSTRUCTOR ═══ -->
+<section class="page" id="page-instructor">
+  <div class="ph"><h1>🤖 AI Instructor</h1><p>Your virtual banking exam coach — powered by Claude AI</p></div>
+  <div class="g2" style="align-items:start">
+    <div class="card">
+      <div class="card-title">💬 Chat with Your Instructor</div>
+      <div class="chat-box" id="chat-box">
+        <div class="cm bot">👋 Namaste! I'm your AI Instructor for SBI PO, IBPS PO, SBI Clerk & IBPS Clerk 2026. I know your prep data — your scores, study hours, weak sections, and how much time you have left.<br><br>Ask me anything: study strategy, weak areas, exam tips, mock analysis, or just some motivation! 🎯<br><br>⚙️ <em>Enter your Anthropic API key in Settings to enable full AI chat — or tap a Quick Prompt below!</em></div>
+      </div>
+      <div class="chat-row">
+        <input type="text" id="chat-inp" placeholder="Ask about your preparation, weak sections, study plan..." onkeypress="if(event.key==='Enter')sendChat()">
+        <button class="btn btn-gold" id="chat-btn" onclick="sendChat()">Send</button>
+      </div>
+      <div id="api-notice" style="margin-top:8px;font-size:11.5px;color:var(--cream-dim)">⚙️ Add your Anthropic API key in Settings to unlock full AI responses</div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-title">⚡ Quick Prompts</div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <button class="btn btn-outline" style="text-align:left;font-size:12.5px" onclick="qp('Analyze my mock test scores and tell me exactly which sections need the most improvement and why')">📊 Analyze my mock scores & weaknesses</button>
+          <button class="btn btn-outline" style="text-align:left;font-size:12.5px" onclick="qp('Create a detailed 7-day study plan for me based on my current progress and upcoming exam dates')">📅 Build my 7-day study plan</button>
+          <button class="btn btn-outline" style="text-align:left;font-size:12.5px" onclick="qp('What are the most high-weightage and frequently asked topics in SBI PO and IBPS PO Prelims 2026? Prioritize for me.')">🎯 SBI & IBPS Prelims key topics</button>
+          <button class="btn btn-outline" style="text-align:left;font-size:12.5px" onclick="qp('How is SBI PO Mains different from IBPS PO Mains in pattern and difficulty? Give exam-specific strategies.')">🔍 SBI vs IBPS Mains differences</button>
+          <button class="btn btn-outline" style="text-align:left;font-size:12.5px" onclick="qp('Give me the top 10 speed hacks for the Quantitative Aptitude section in banking exams with examples')">⚡ Quant speed & accuracy tips</button>
+          <button class="btn btn-outline" style="text-align:left;font-size:12.5px" onclick="qp('My penalty points are rising and I feel demotivated. Give me a realistic reset plan and motivation to get back on track.')">💪 Motivate me & reset my plan</button>
+          <button class="btn btn-outline" style="text-align:left;font-size:12.5px" onclick="qp('How should I prepare for GK/Banking Awareness for SBI and IBPS 2026? Give a daily reading schedule.')">📰 GK/Banking Awareness strategy</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📋 Exam Pattern Quick Reference</div>
+        <div id="exam-pat-ref" style="font-size:12px"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<!-- KITTY -->
+<div class="kitty-wrap" onclick="kittyTalk()">
+  <div class="kitty">
+    <div class="k-tail"></div>
+    <div class="k-body"></div>
+    <div class="k-head">
+      <div class="k-ear l"></div>
+      <div class="k-ear r"></div>
+      <div class="k-eye l"></div>
+      <div class="k-eye r"></div>
+      <div class="k-nose"></div>
+      <div class="k-wh l"></div>
+      <div class="k-wh r"></div>
+    </div>
+  </div>
+  <div class="k-bubble" id="k-bubble">You've got this! 🐱</div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-overlay" id="settings-overlay">
+  <div class="modal">
+    <h2>⚙️ Settings</h2>
+    <div class="fg"><label class="fl">Your Name</label><input type="text" id="s-name" placeholder="Your name"></div>
+    <div class="fg">
+      <label class="fl">Anthropic API Key (for AI Instructor)</label>
+      <input type="password" id="s-apikey" placeholder="sk-ant-...">
+      <div style="font-size:11px;color:var(--cream-dim);margin-top:4px">Stored only in your browser's localStorage. Get a free key at <strong>console.anthropic.com</strong></div>
+    </div>
+    <div class="fg"><label class="fl">Daily Study Goal (hours)</label><input type="number" id="s-goal" value="8" min="1" max="18" step="0.5"></div>
+    <div class="fg">
+      <label class="fl">API Proxy URL (optional, for self-hosted version)</label>
+      <input type="text" id="s-proxy" placeholder="https://your-worker.workers.dev (leave blank for direct)">
+      <div style="font-size:11px;color:var(--cream-dim);margin-top:4px">For self-hosting: deploy a Cloudflare Worker proxy. See README for instructions.</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:6px">
+      <button class="btn btn-gold" style="flex:1" onclick="saveSettings()">Save Settings</button>
+      <button class="btn btn-outline" style="flex:1" onclick="closeSettings()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" style="display:none"></div>
+
+<script>
+// ═════════════════════════════════════
+// DATA
+// ═════════════════════════════════════
+const EXAMS = [
+  {n:'SBI PO',ph:'Prelims',d:new Date('2026-08-01'),c:'var(--blue)'},
+  {n:'IBPS PO',ph:'Prelims',d:new Date('2026-08-22'),c:'var(--purple)'},
+  {n:'SBI PO',ph:'Mains',d:new Date('2026-09-12'),c:'var(--blue)'},
+  {n:'SBI Clerk',ph:'Prelims',d:new Date('2026-09-27'),c:'var(--green)'},
+  {n:'IBPS PO',ph:'Mains',d:new Date('2026-10-04'),c:'var(--purple)'},
+  {n:'IBPS Clerk',ph:'Prelims',d:new Date('2026-10-10'),c:'var(--orange)'},
+  {n:'SBI Clerk',ph:'Mains',d:new Date('2026-11-07'),c:'var(--green)'},
+  {n:'IBPS Clerk',ph:'Mains',d:new Date('2026-12-27'),c:'var(--orange)'},
+];
+
+const QUOTES=[
+  {t:"Success is not final, failure is not fatal: it is the courage to continue that counts.",a:"Winston Churchill"},
+  {t:"The SBI PO seat you want is being prepared for, right now, by someone else. Are you working harder?",a:"Exam Wisdom"},
+  {t:"Every chapter you master today is a question answered correctly in the exam.",a:"Study Philosophy"},
+  {t:"Hard work beats talent when talent doesn't work hard.",a:"Tim Notke"},
+  {t:"GK is not memorized overnight. It's built drop by drop, read by read, daily.",a:"Current Affairs Principle"},
+  {t:"Difficult roads often lead to beautiful destinations — like a confirmed government bank job.",a:"Aspirant's Truth"},
+  {t:"Don't wish it were easier. Wish you were better.",a:"Jim Rohn"},
+  {t:"The Reasoning section is won in practice rooms, not in exam halls.",a:"Expert Strategy"},
+  {t:"Every mock test you take is a lesson, not a judgment. Learn and move on.",a:"Growth Mindset"},
+  {t:"Speed comes from practice. Accuracy comes from understanding. Banking exams need both.",a:"Quant Principle"},
+  {t:"Your gym session and your study session share one trait — both build strength through consistency.",a:"Discipline"},
+  {t:"Reading newspapers 30 minutes daily does more for your GA than cramming a week before the exam.",a:"Current Affairs Tip"},
+  {t:"One more question practiced today is one more mark secured tomorrow.",a:"Daily Habit"},
+  {t:"The difference between dreaming of a bank job and having one is showing up every single day.",a:"Action Principle"},
+  {t:"Clarity + Consistency + Courage = Banking Job ✅",a:"BankPrep Formula"},
+  {t:"Sleep is not wasted time. It's when your brain consolidates everything you studied today.",a:"Neuroscience"},
+  {t:"Don't count the days. Make the days count.",a:"Muhammad Ali"},
+  {t:"You are stronger than you think. Every difficult topic you've conquered is proof.",a:"Self Belief"},
+  {t:"Banking exams don't reward the smartest — they reward the most consistent.",a:"Exam Reality"},
+  {t:"Your only competition is who you were yesterday.",a:"Personal Growth"},
+];
+
+const KITTY_MSGS=["Purr... study hard! 🐱","You got this, future banker! 😺","Mock tests = practice hunts! 🐾","Keep going! One chapter at a time 💛","Don't skip gym! Even I stretch! 🐱","I believe in mew! 🌟","Reading GK today? 📰 Good kitty!","Nyaa~ you're doing amazing! ✨","Every day logged = one step closer! 🐾","Purrfect consistency! Keep it up! 😻"];
+
+const SYLLABUS={
+  prelims:[
+    {s:'English Language',c:'var(--blue)',t:['Reading Comprehension (RC)','Cloze Test','Error Spotting / Detection','Fill in the Blanks (Single & Double)','Sentence Rearrangement / Para Jumbles','Phrase / Idiom Meaning','Column-Based Questions (Match the Column)','Word Usage / Odd One Out','Sentence Improvement','Para Completion / Inference']},
+    {s:'Quantitative Aptitude',c:'var(--purple)',t:['Number Series (Missing & Wrong)','Simplification & Approximation','Quadratic Equations','Data Interpretation — Bar Graph','Data Interpretation — Pie Chart','Data Interpretation — Table / Tabular','Data Interpretation — Line Graph','Data Interpretation — Mixed / Caselet','Average','Percentage','Profit & Loss','Ratio & Proportion','Time & Work / Pipe & Cistern','Time, Speed & Distance','Simple & Compound Interest','Mixtures & Alligation','Partnership','Permutation & Combination','Probability','Mensuration']},
+    {s:'Reasoning Ability',c:'var(--green)',t:['Puzzles — Linear Seating Arrangement','Puzzles — Circular Seating Arrangement','Puzzles — Floor / Building Based','Puzzles — Box / Month / Day Based','Syllogism','Coding-Decoding','Blood Relations','Direction & Distance','Inequalities (Direct & Coded)','Order & Ranking','Input-Output Machine','Alpha-Numeric Series','Data Sufficiency','Logical Reasoning — Course of Action','Logical Reasoning — Statement & Conclusion','Critical Reasoning']},
+  ],
+  'mains-po':[
+    {s:'Reasoning & Computer Aptitude',c:'var(--green)',t:['Advanced Floor / Box Puzzles','Circular + Linear Combined Puzzles','Scheduling / Calendar Puzzles','Machine Input-Output (Complex)','Critical Reasoning','Logical Reasoning — Inference','Course of Action','Argument & Decision Making','Computer Fundamentals & History','Types of Memory (RAM, ROM)','Operating Systems (Windows, Linux)','MS Office — Word, Excel, PowerPoint','Internet & Networking Basics','Database Management (DBMS) Basics','Number Systems — Binary, Decimal, Hex','Cybersecurity & Threats','Keyboard Shortcuts']},
+    {s:'Data Analysis & Interpretation',c:'var(--purple)',t:['Caselet DI (Paragraph-based)','Mixed DI (2+ graph types)','Missing DI (Calculate missing values)','Radar / Web Chart DI','Advanced Approximation','Quantity Comparison (Qty I vs Qty II)','Data Sufficiency (2-statement)','Probability (advanced)','Permutation & Combination (advanced)']},
+    {s:'English Language (Mains)',c:'var(--blue)',t:['Reading Comprehension — Complex Passages','Vocabulary-based RC Questions','Error Correction in Full Paragraphs','Fillers — Double / Triple Blanks','Sentence Completion (Coherence-based)','Paragraph Summary / Central Idea','Word Rearrangement in Sentences','Spelling & Grammar Errors','Connectors / Linkers']},
+    {s:'General / Economy / Banking Awareness',c:'var(--orange)',t:['History of Banking in India','RBI — Structure, Functions & Policies','Types of Banks (PSB, Private, RRB, SFB)','NABARD, SIDBI, NHB, EXIM Bank','Monetary Policy — CRR, SLR, Repo, Reverse Repo','Fiscal Policy — Budget, Deficit','Union Budget 2025-26 Highlights','Economic Survey 2025-26 Key Points','International Org — IMF, World Bank, WTO, ADB','Pradhan Mantri Schemes (banking-related)','Current Affairs — Last 6 Months (National)','Current Affairs — Last 6 Months (International)','Awards, Appointments & Summits','Books, Authors & Sports (static)','Capital Markets — SEBI, Stock Market','Insurance — IRDAI, LIC basics','Cryptocurrencies & Digital Finance','Basel Norms — I, II, III']},
+    {s:'Descriptive — SBI PO Mains',c:'var(--gold)',t:['Formal Letter Writing (Bank-related)','Email Writing (Professional Format)','Essay Writing — Economic Topics','Essay Writing — Banking & Finance Topics','Essay Writing — Social Issues','Précis Writing (Summary in fixed words)','Situation Analysis / Report Writing']},
+  ],
+  'mains-clerk':[
+    {s:'Reasoning & Computer Aptitude',c:'var(--green)',t:['Puzzles — All Types (Moderate Level)','Syllogism (Advanced)','Coding-Decoding (New Pattern)','Inequalities','Input-Output Machine','Blood Relations','Direction & Distance','Computer Fundamentals','Operating System Basics','MS Office (Word, Excel, PPT)','Internet & Email Concepts','Number Systems (Binary, Decimal)','Hardware & Software Concepts']},
+    {s:'Quantitative Aptitude (Mains)',c:'var(--purple)',t:['Data Interpretation — All Types','Number Series','Simplification & Approximation','Percentage','Average','SI & CI','Profit & Loss','Time & Work','Time, Speed & Distance','Partnership','Data Sufficiency','Missing Number Series']},
+    {s:'General English (Mains)',c:'var(--blue)',t:['Reading Comprehension','Fillers — Double & Triple Blanks','Error Detection (Full Sentence)','Sentence Rearrangement','Cloze Test (Advanced Pattern)','Paragraph Completion / Connectors','Vocabulary — Antonyms / Synonyms']},
+    {s:'General / Financial Awareness',c:'var(--orange)',t:['Banking Terms & Definitions','RBI Functions & Policies','Government Banking Schemes','Types of Accounts & Loans','Current Affairs — Last 3 Months','Capital Markets Basics','Insurance Basics','Static GK — Capitals, Currencies','National Parks & Wildlife Sanctuaries','Awards & Sports (recent)','India\'s Economy — GDP, Inflation']},
+  ],
+};
+
+const PATTERNS=[
+  {e:'SBI PO Prelims',secs:[{n:'English Language',q:30,m:30,t:20},{n:'Quantitative Aptitude',q:35,m:35,t:20},{n:'Reasoning Ability',q:35,m:35,t:20}],tot:{q:100,m:100,t:60},note:'Qualifying only. No sectional cut-off. Neg: -0.25/wrong.'},
+  {e:'SBI PO Mains (Obj)',secs:[{n:'Reasoning & Computer',q:45,m:60,t:60},{n:'Data Analysis & DI',q:35,m:60,t:45},{n:'Gen/Economy Awareness',q:40,m:40,t:35},{n:'English Language',q:50,m:40,t:40}],tot:{q:170,m:200,t:180},desc:'Descriptive: 50 marks | 30 min | 1 Essay + 1 Letter/Email'},
+  {e:'IBPS PO Prelims',secs:[{n:'English Language',q:30,m:30,t:20},{n:'Quantitative Aptitude',q:35,m:35,t:20},{n:'Reasoning Ability',q:35,m:35,t:20}],tot:{q:100,m:100,t:60},note:'Qualifying only. Neg: -0.25/wrong.'},
+  {e:'IBPS PO Mains',secs:[{n:'Reasoning & Computer',q:45,m:60,t:60},{n:'English Language',q:35,m:40,t:40},{n:'Data Analysis & DI',q:35,m:60,t:45},{n:'Gen/Economy Awareness',q:40,m:40,t:35}],tot:{q:155,m:200,t:180},desc:'Descriptive: 25 marks | 30 min | 1 Essay + 1 Letter'},
+  {e:'SBI Clerk Prelims',secs:[{n:'English Language',q:30,m:30,t:20},{n:'Numerical Ability',q:35,m:35,t:20},{n:'Reasoning Ability',q:35,m:35,t:20}],tot:{q:100,m:100,t:60},note:'Qualifying only. No sectional cut-off. Neg: -0.25/wrong.'},
+  {e:'SBI Clerk Mains',secs:[{n:'Gen/Financial Awareness',q:50,m:50,t:35},{n:'General English',q:40,m:40,t:35},{n:'Quantitative Aptitude',q:50,m:50,t:45},{n:'Reasoning & Comp. Aptitude',q:50,m:60,t:45}],tot:{q:190,m:200,t:160},note:'Marks in Mains only count for merit. No interview.'},
+  {e:'IBPS Clerk Prelims',secs:[{n:'English Language',q:30,m:30,t:20},{n:'Numerical Ability',q:35,m:35,t:20},{n:'Reasoning Ability',q:35,m:35,t:20}],tot:{q:100,m:100,t:60},note:'Qualifying only. Neg: -0.25/wrong.'},
+  {e:'IBPS Clerk Mains',secs:[{n:'Gen/Financial Awareness',q:50,m:50,t:35},{n:'General English',q:40,m:40,t:35},{n:'Reasoning & Comp. Apt.',q:50,m:60,t:45},{n:'Quantitative Aptitude',q:50,m:50,t:45}],tot:{q:190,m:200,t:160},note:'No interview. Merit based on Mains only.'},
+];
+
+// ═════════════════════════════════════
+// STATE
+// ═════════════════════════════════════
+let curMock='SBI PO', curChap='prelims', calDate=new Date(), qIdx=0, chatHistory=[];
+
+// ═════════════════════════════════════
+// LOCALSTORAGE
+// ═════════════════════════════════════
+const LS={
+  get:(k,d=null)=>{try{const v=localStorage.getItem(k);return v!==null?JSON.parse(v):d}catch{return d}},
+  set:(k,v)=>localStorage.setItem(k,JSON.stringify(v)),
+};
+
+// ═════════════════════════════════════
+// INIT
+// ═════════════════════════════════════
+window.onload=()=>{
+  const td=new Date().toISOString().split('T')[0];
+  document.getElementById('l-date').value=td;
+  document.getElementById('m-date').value=td;
+  document.getElementById('desc-date').value=td;
+  setGreeting(); renderCountdown(); renderQuote();
+  loadSettings(); renderDashboard();
+  renderTodos(); renderLogHistory(); renderPenLog();
+  updateSecFields(); renderMockHistory(); renderMockSummary();
+  renderChapters(); renderDesc(); renderCalendar();
+  renderExamPatRef();
+};
+
+// ═════════════════════════════════════
+// NAV
+// ═════════════════════════════════════
+function go(pg){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item[data-page]').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+pg).classList.add('active');
+  document.querySelector('[data-page="'+pg+'"]')?.classList.add('active');
+  if(pg==='calendar')renderCalendar();
+  if(pg==='dashboard')renderDashboard();
+}
+
+// ═════════════════════════════════════
+// GREETING & DATE
+// ═════════════════════════════════════
+function setGreeting(){
+  const h=new Date().getHours(), name=LS.get('userName','Champion');
+  const gr=h<12?'Good Morning':h<17?'Good Afternoon':'Good Evening';
+  document.getElementById('greeting').textContent=`${gr}, ${name}! 👑`;
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const mons=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const n=new Date();
+  document.getElementById('date-display').textContent=`${days[n.getDay()]}, ${n.getDate()} ${mons[n.getMonth()]} ${n.getFullYear()}`;
+}
+
+// ═════════════════════════════════════
+// COUNTDOWN
+// ═════════════════════════════════════
+function renderCountdown(){
+  const now=new Date();
+  const upcoming=EXAMS.filter(e=>e.d>now).slice(0,5);
+  document.getElementById('countdown-row').innerHTML=upcoming.map(e=>{
+    const diff=Math.ceil((e.d-now)/864e5);
+    return`<div class="cd-item"><div class="cd-days" style="color:${e.c}">${diff}</div><div style="font-size:12px;color:${e.c};margin-top:2px;font-weight:600">${e.n}</div><div class="cd-phase">${e.ph}</div><div class="cd-exam">days left</div></div>`;
+  }).join('');
+}
+
+// ═════════════════════════════════════
+// QUOTES
+// ═════════════════════════════════════
+function renderQuote(){
+  const doy=Math.floor((new Date()-new Date(new Date().getFullYear(),0,0))/864e5);
+  qIdx=doy%QUOTES.length; showQ(qIdx);
+}
+function showQ(i){
+  const q=QUOTES[i];
+  document.getElementById('daily-quote').textContent=`"${q.t}"`;
+  document.getElementById('quote-author').textContent=`— ${q.a}`;
+  document.getElementById('quote-date').textContent=new Date().toDateString();
+}
+function nextQuote(){qIdx=(qIdx+1)%QUOTES.length;showQ(qIdx);}
+
+// ═════════════════════════════════════
+// KITTY
+// ═════════════════════════════════════
+function kittyTalk(){
+  const b=document.getElementById('k-bubble');
+  b.textContent=KITTY_MSGS[Math.floor(Math.random()*KITTY_MSGS.length)];
+  b.style.display='block';
+  setTimeout(()=>b.style.display='none',3500);
+}
+
+// ═════════════════════════════════════
+// DASHBOARD
+// ═════════════════════════════════════
+function renderDashboard(){
+  const td=new Date().toISOString().split('T')[0];
+  const logs=LS.get('studyLogs',[]);
+  const tl=logs.find(l=>l.date===td);
+  if(tl){
+    document.getElementById('d-hours').textContent=tl.hours+'h';
+    document.getElementById('d-chapters').textContent=tl.chapters||0;
+    document.getElementById('d-gym').textContent=tl.gym==='yes'?'✅':tl.gym==='rest'?'😴':'❌';
+  }
+  const mocks=LS.get('mockScores',[]);
+  if(mocks.length){
+    const lat=mocks[mocks.length-1];
+    document.getElementById('d-mock').textContent=Math.round(lat.score/lat.max*100)+'%';
+  }
+  // Streaks
+  let ss=0,gs=0;
+  for(let i=0;i<90;i++){
+    const d=new Date();d.setDate(d.getDate()-i);
+    const key=d.toISOString().split('T')[0];
+    const log=logs.find(l=>l.date===key);
+    if(!log||log.dayType==='missed') break; ss++;
+  }
+  for(let i=0;i<90;i++){
+    const d=new Date();d.setDate(d.getDate()-i);
+    const key=d.toISOString().split('T')[0];
+    const log=logs.find(l=>l.date===key);
+    if(!log||log.gym==='no') break; gs++;
+  }
+  document.getElementById('study-streak').textContent=ss;
+  document.getElementById('gym-streak').textContent=gs;
+  const tp=logs.reduce((s,l)=>s+(l.penalty||0),0);
+  document.getElementById('pen-total-dash').textContent=tp+' pts';
+  // Focus areas
+  renderFocus(mocks);
+  renderQTodos();
+}
+
+function renderFocus(mocks){
+  const c=document.getElementById('focus-areas');
+  if(mocks.length<2){c.innerHTML='<div style="color:var(--cream-dim);font-size:13px">Log 2+ mock tests to see AI-powered focus recommendations.</div>';return;}
+  const st={},sc={};
+  mocks.forEach(m=>{Object.entries(m.secs||{}).forEach(([k,v])=>{st[k]=(st[k]||0)+parseFloat(v||0);sc[k]=(sc[k]||0)+1;});});
+  const avgs=Object.entries(st).map(([k,t])=>({k,a:t/sc[k]})).sort((a,b)=>a.a-b.a);
+  if(!avgs.length){c.innerHTML='<div style="color:var(--cream-dim);font-size:13px">Add section scores in mock tests to see focus areas.</div>';return;}
+  c.innerHTML=avgs.slice(0,4).map(w=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)">
+      <span style="font-size:13px">⚠️ ${w.k}</span>
+      <span class="badge bred">Avg: ${w.a.toFixed(1)}</span>
+    </div>`).join('');
+}
+
+// ═════════════════════════════════════
+// LOG
+// ═════════════════════════════════════
+function calcPenalty(l){
+  let p=0;
+  if(l.dayType==='missed')p+=5;
+  else if(l.hours<4)p+=3;
+  if(l.gym==='no'&&l.dayType!=='missed')p+=2;
+  return p;
+}
+
+function saveLog(){
+  const date=document.getElementById('l-date').value;
+  const hours=parseFloat(document.getElementById('l-hours').value)||0;
+  const chapters=parseInt(document.getElementById('l-chapters').value)||0;
+  const gym=document.querySelector('input[name="gym"]:checked')?.value||'no';
+  const dayType=document.getElementById('l-daytype').value;
+  const notes=document.getElementById('l-notes').value;
+  const subjects=[...document.querySelectorAll('#subj-check input:checked')].map(c=>c.value);
+  if(!date)return toast('Please select a date!');
+  const logs=LS.get('studyLogs',[]);
+  const ei=logs.findIndex(l=>l.date===date);
+  const entry={date,hours,chapters,gym,dayType,notes,subjects,penalty:calcPenalty({hours,gym,dayType})};
+  if(ei>=0)logs[ei]=entry;else logs.push(entry);
+  logs.sort((a,b)=>b.date.localeCompare(a.date));
+  LS.set('studyLogs',logs);
+  toast('✅ Log saved!'); renderLogHistory(); renderPenLog(); renderDashboard();
+}
+
+function renderLogHistory(){
+  const logs=LS.get('studyLogs',[]);
+  document.getElementById('log-tbody').innerHTML=logs.slice(0,30).map(l=>`
+    <tr>
+      <td>${l.date}</td>
+      <td><strong>${l.hours}h</strong></td>
+      <td style="font-size:11.5px">${(l.subjects||[]).join(', ')||'—'}</td>
+      <td>${l.chapters||0}</td>
+      <td>${l.gym==='yes'?'✅':l.gym==='rest'?'😴':'❌'}</td>
+      <td><span class="badge ${l.dayType==='full'?'bgreen':l.dayType==='partial'?'bg':'bred'}">${l.dayType}</span></td>
+      <td style="color:${l.penalty>0?'var(--red)':'var(--green)'}">${l.penalty>0?'+'+l.penalty+' pts':'✅ 0'}</td>
+      <td style="font-size:11.5px;color:var(--cream-dim);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.notes||'—'}</td>
+    </tr>`).join('')||'<tr><td colspan="8" style="text-align:center;color:var(--cream-dim);padding:20px">No logs yet. Log your first study session! 📚</td></tr>';
+  const tp=LS.get('studyLogs',[]).reduce((s,l)=>s+(l.penalty||0),0);
+  document.getElementById('pen-total').textContent=tp;
+}
+
+function renderPenLog(){
+  const logs=LS.get('studyLogs',[]).filter(l=>l.penalty>0).slice(0,6);
+  document.getElementById('pen-log').innerHTML=logs.map(l=>`
+    <div style="display:flex;justify-content:space-between;font-size:12.5px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)">
+      <span style="color:var(--cream-dim)">${l.date} — ${l.dayType}</span>
+      <span style="color:var(--red);font-weight:600">+${l.penalty} pts</span>
+    </div>`).join('')||'<div style="font-size:13px;color:var(--green)">🎉 No penalties yet! Amazing consistency!</div>';
+}
+
+// ═════════════════════════════════════
+// TODO
+// ═════════════════════════════════════
+function addTodo(){
+  const t=document.getElementById('todo-inp').value.trim();
+  if(!t)return;
+  const type=document.getElementById('todo-type').value;
+  const todos=LS.get('todos',[]);
+  todos.unshift({id:Date.now(),t,type,done:false});
+  LS.set('todos',todos);
+  document.getElementById('todo-inp').value='';
+  renderTodos(); renderQTodos();
+}
+function addQTodo(){
+  const t=document.getElementById('q-todo-inp').value.trim();
+  if(!t)return;
+  const todos=LS.get('todos',[]);
+  todos.unshift({id:Date.now(),t,type:'today',done:false});
+  LS.set('todos',todos);
+  document.getElementById('q-todo-inp').value='';
+  renderTodos(); renderQTodos();
+}
+function toggleTodo(id){
+  const todos=LS.get('todos',[]);
+  const ti=todos.find(x=>x.id===id);
+  if(ti)ti.done=!ti.done;
+  LS.set('todos',todos); renderTodos(); renderQTodos();
+}
+function delTodo(id){
+  LS.set('todos',LS.get('todos',[]).filter(x=>x.id!==id));
+  renderTodos(); renderQTodos();
+}
+function renderTodos(){
+  const todos=LS.get('todos',[]);
+  document.getElementById('todo-list').innerHTML=todos.slice(0,12).map(t=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)">
+      <input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo(${t.id})" style="accent-color:var(--gold);width:14px;height:14px;cursor:pointer">
+      <span style="flex:1;font-size:13px;${t.done?'text-decoration:line-through;opacity:.45':''}">${t.t}</span>
+      <span class="badge ${t.type==='today'?'bblue':'bg'}" style="font-size:9.5px">${t.type}</span>
+      <button onclick="delTodo(${t.id})" style="background:none;border:none;color:var(--cream-dim);cursor:pointer;font-size:17px;line-height:1">×</button>
+    </div>`).join('')||'<div style="font-size:13px;color:var(--cream-dim)">No tasks yet! Add your study goals.</div>';
+}
+function renderQTodos(){
+  const todos=LS.get('todos',[]).filter(t=>!t.done).slice(0,5);
+  document.getElementById('q-todos').innerHTML=todos.map(t=>`
+    <div style="display:flex;align-items:center;gap:8px">
+      <input type="checkbox" onchange="toggleTodo(${t.id})" style="accent-color:var(--gold);width:14px;height:14px;cursor:pointer">
+      <span style="font-size:13px;flex:1">${t.t}</span>
+      <span class="badge ${t.type==='today'?'bblue':'bg'}" style="font-size:9.5px">${t.type}</span>
+    </div>`).join('')||'<div style="font-size:13px;color:var(--green)">All tasks complete! ✅</div>';
+}
+
+// ═════════════════════════════════════
+// MOCK SCORES
+// ═════════════════════════════════════
+const PRELIMS_SECS=['English Language','Quantitative Aptitude','Reasoning Ability'];
+const MAINS_SECS=['English Language','Reasoning & Computer','Data Analysis / DI','General Awareness'];
+const SEC_MAX={'English Language':30,'Quantitative Aptitude':35,'Reasoning Ability':35,'Reasoning & Computer':60,'Data Analysis / DI':60,'General Awareness':40};
+
+function switchMock(ex){
+  curMock=ex;
+  document.querySelectorAll('#page-mock .tab-btn').forEach((b,i)=>b.classList.toggle('active',['SBI PO','SBI Clerk','IBPS PO','IBPS Clerk'][i]===ex));
+  document.getElementById('mock-exam-label').textContent=ex;
+  document.getElementById('mock-hist-title').textContent='📋 Score History — '+ex;
+  renderMockHistory(); renderMockSummary();
+}
+
+function updateSecFields(){
+  const ph=document.getElementById('m-phase').value;
+  const secs=ph==='Prelims'?PRELIMS_SECS:MAINS_SECS;
+  document.getElementById('sec-fields').innerHTML=secs.map(s=>`
+    <div style="display:flex;align-items:center;gap:8px">
+      <label style="font-size:12px;color:var(--cream-dim);min-width:160px;flex-shrink:0">${s}</label>
+      <input type="number" id="sf-${s.replace(/[\s\/]+/g,'_')}" placeholder="Score" style="width:80px;flex-shrink:0">
+      <span style="font-size:11px;color:var(--cream-dim)">/ ${SEC_MAX[s]||40}</span>
+    </div>`).join('');
+}
+
+function saveMock(){
+  const ph=document.getElementById('m-phase').value;
+  const date=document.getElementById('m-date').value;
+  const score=parseFloat(document.getElementById('m-score').value)||0;
+  const max=parseFloat(document.getElementById('m-max').value)||100;
+  const prov=document.getElementById('m-prov').value;
+  const rank=document.getElementById('m-rank').value;
+  const notes=document.getElementById('m-notes').value;
+  if(!date)return toast('Select date first!');
+  const secs={};
+  document.querySelectorAll('#sec-fields input').forEach(inp=>{
+    if(inp.value){const k=inp.id.replace('sf-','').replace(/_/g,' ');secs[k]=parseFloat(inp.value);}
+  });
+  const mocks=LS.get('mockScores',[]);
+  mocks.push({exam:curMock,ph,date,score,max,secs,prov,rank,notes});
+  LS.set('mockScores',mocks);
+  toast('✅ Mock score saved!'); renderMockHistory(); renderMockSummary(); renderDashboard();
+}
+
+function renderMockHistory(){
+  const mocks=LS.get('mockScores',[]).filter(m=>m.exam===curMock);
+  document.getElementById('mock-tbody').innerHTML=mocks.map(m=>{
+    const pct=Math.round(m.score/m.max*100);
+    const col=pct>=70?'var(--green)':pct>=50?'var(--orange)':'var(--red)';
+    const secStr=Object.entries(m.secs||{}).map(([k,v])=>k.split(' ')[0]+':'+v).join(' | ');
+    return`<tr>
+      <td>${m.date}</td>
+      <td><span class="badge ${m.ph==='Prelims'?'bblue':'bpurple'}">${m.ph}</span></td>
+      <td><strong>${m.score}/${m.max}</strong></td>
+      <td style="color:${col};font-weight:700">${pct}%</td>
+      <td style="font-size:11px;color:var(--cream-dim)">${secStr||'—'}</td>
+      <td style="font-size:12px">${m.rank||'—'}</td>
+      <td style="font-size:12px;color:var(--cream-dim)">${m.prov||'—'}</td>
+      <td style="font-size:11px;color:var(--cream-dim);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.notes||'—'}</td>
+    </tr>`;
+  }).join('')||'<tr><td colspan="8" style="text-align:center;color:var(--cream-dim);padding:20px">No mock scores for '+curMock+' yet. Start practicing!</td></tr>';
+}
+
+function renderMockSummary(){
+  const mocks=LS.get('mockScores',[]).filter(m=>m.exam===curMock);
+  const c=document.getElementById('mock-summary');
+  if(!mocks.length){c.innerHTML='<div style="color:var(--cream-dim);font-size:13px;grid-column:span 2">No mocks recorded. Take your first mock test!</div>';document.getElementById('sec-avgs').innerHTML='';return;}
+  const pcts=mocks.map(m=>m.score/m.max*100);
+  const avg=pcts.reduce((a,b)=>a+b,0)/pcts.length;
+  const best=Math.max(...pcts), lat=pcts[pcts.length-1];
+  const trend=pcts.length>1?(pcts[pcts.length-1]>pcts[pcts.length-2]?'📈':'📉'):'—';
+  c.innerHTML=`
+    <div style="text-align:center"><div class="sbig">${avg.toFixed(1)}%</div><div style="font-size:11px;color:var(--cream-dim);margin-top:4px">Average</div></div>
+    <div style="text-align:center"><div class="sbig" style="color:var(--green)">${best.toFixed(1)}%</div><div style="font-size:11px;color:var(--cream-dim);margin-top:4px">Best</div></div>
+    <div style="text-align:center"><div class="sbig" style="color:var(--blue)">${lat.toFixed(1)}%</div><div style="font-size:11px;color:var(--cream-dim);margin-top:4px">Latest</div></div>
+    <div style="text-align:center"><div class="sbig" style="font-size:36px">${trend}</div><div style="font-size:11px;color:var(--cream-dim);margin-top:4px">Trend</div></div>`;
+  // Section avgs
+  const st={},sc={};
+  mocks.forEach(m=>{Object.entries(m.secs||{}).forEach(([k,v])=>{st[k]=(st[k]||0)+parseFloat(v||0);sc[k]=(sc[k]||0)+1;});});
+  document.getElementById('sec-avgs').innerHTML=Object.entries(st).map(([k,t])=>{
+    const a=t/sc[k], mx=SEC_MAX[k]||40, p=(a/mx)*100;
+    const col=p>=70?'var(--green)':p>=50?'var(--orange)':'var(--red)';
+    return`<div style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px">
+        <span>${k}</span><span style="color:${col}">${a.toFixed(1)}/${mx} (${p.toFixed(0)}%)</span>
+      </div>
+      <div class="pb-wrap"><div class="pb" style="width:${p}%;background:${col}"></div></div>
+    </div>`;
+  }).join('')||'<div style="font-size:13px;color:var(--cream-dim)">Add section scores to see breakdown analysis.</div>';
+}
+
+// ═════════════════════════════════════
+// CHAPTERS
+// ═════════════════════════════════════
+function switchChap(t){
+  curChap=t;
+  document.querySelectorAll('#page-chapters .tab-btn').forEach((b,i)=>b.classList.toggle('active',['prelims','mains-po','mains-clerk'][i]===t));
+  renderChapters();
+}
+function renderChapters(){
+  const syl=SYLLABUS[curChap], saved=LS.get('ch_'+curChap,{});
+  document.getElementById('chap-content').innerHTML=syl.map(sub=>{
+    const done=sub.t.filter((_,i)=>saved[sub.s+'_'+i]).length;
+    const pct=Math.round(done/sub.t.length*100);
+    return`<div class="card" style="margin-bottom:14px;border-left:4px solid ${sub.c}">
+      <div class="card-title" style="color:${sub.c};justify-content:space-between">
+        <span>${sub.s}</span>
+        <span style="font-size:13px;color:var(--cream-dim)">${done}/${sub.t.length} topics — ${pct}%</span>
+      </div>
+      <div class="pb-wrap" style="margin-bottom:14px"><div class="pb" style="width:${pct}%;background:${sub.c}"></div></div>
+      <ul class="ch-list">${sub.t.map((tp,i)=>{
+        const k=sub.s+'_'+i, d=saved[k]||false;
+        return`<li class="ch-item ${d?'done':''}" onclick="toggleCh('${k}')">
+          <input type="checkbox" ${d?'checked':''} onclick="event.stopPropagation();toggleCh('${k}')">
+          <span style="font-size:13px">${tp}</span>
+        </li>`;
+      }).join('')}</ul>
+    </div>`;
+  }).join('');
+}
+function toggleCh(k){
+  const saved=LS.get('ch_'+curChap,{});
+  saved[k]=!saved[k]; LS.set('ch_'+curChap,saved); renderChapters();
+}
+
+// ═════════════════════════════════════
+// DESCRIPTIVE
+// ═════════════════════════════════════
+function saveDesc(){
+  const type=document.getElementById('desc-type').value;
+  const topic=document.getElementById('desc-topic').value;
+  const date=document.getElementById('desc-date').value;
+  const words=document.getElementById('desc-words').value;
+  const rating=document.getElementById('desc-rating').value;
+  const time=document.getElementById('desc-time').value;
+  const notes=document.getElementById('desc-notes').value;
+  if(!topic)return toast('Enter a topic first!');
+  const items=LS.get('descriptive',[]);
+  items.unshift({type,topic,date,words,rating,time,notes});
+  LS.set('descriptive',items);
+  toast('✅ Writing task logged!'); renderDesc();
+}
+function renderDesc(){
+  const items=LS.get('descriptive',[]);
+  document.getElementById('desc-tbody').innerHTML=items.map(d=>`
+    <tr>
+      <td style="font-size:12px">${d.date}</td>
+      <td><span class="badge bg" style="font-size:10px">${d.type.split(' ')[0]}</span></td>
+      <td style="font-size:12px;max-width:160px">${d.topic}</td>
+      <td style="font-size:12px">${d.words||'—'}</td>
+      <td style="font-size:12px">${d.time?d.time+'m':'—'}</td>
+      <td style="color:${d.rating>=7?'var(--green)':d.rating>=5?'var(--orange)':'var(--red)'};font-weight:600">${d.rating}/10</td>
+      <td style="font-size:11px;color:var(--cream-dim)">${d.notes||'—'}</td>
+    </tr>`).join('')||'<tr><td colspan="7" style="text-align:center;color:var(--cream-dim);padding:20px">No writing tasks yet. Write your first essay/email! ✍️</td></tr>';
+  renderDescReminders(items);
+  renderDescStats(items);
+}
+function renderDescReminders(items){
+  const now=new Date();
+  const lastEssay=items.find(i=>i.type==='Essay Writing');
+  const lastEmail=items.find(i=>i.type==='Email Writing');
+  const dE=lastEssay?Math.floor((now-new Date(lastEssay.date))/864e5):999;
+  const dM=lastEmail?Math.floor((now-new Date(lastEmail.date))/864e5):999;
+  const cls=(d)=>d>14?'bred':d>10?'bg':'bgreen';
+  document.getElementById('desc-reminders').innerHTML=`
+    <div class="di"><div><div style="font-size:13.5px;font-weight:500">📝 Essay Writing</div><div style="font-size:11px;color:var(--cream-dim)">Target: every 2 weeks</div></div><span class="badge ${cls(dE)}">${dE>900?'Never done!':dE+' days ago'}</span></div>
+    <div class="di"><div><div style="font-size:13.5px;font-weight:500">📧 Email / Letter Writing</div><div style="font-size:11px;color:var(--cream-dim)">Target: every 2 weeks</div></div><span class="badge ${cls(dM)}">${dM>900?'Never done!':dM+' days ago'}</span></div>
+    ${dE>14||dM>14?`<div style="margin-top:10px;padding:10px;border-radius:8px;background:rgba(224,85,85,.08);border:1px solid rgba(224,85,85,.25);font-size:12.5px;color:var(--red)">⚠️ ${dE>14?'Essay':'Email'} writing is overdue! SBI PO Mains has a 50-mark descriptive paper. Practice today!</div>`:'<div style="margin-top:10px;font-size:13px;color:var(--green)">✅ You\'re on track with descriptive writing! Keep it up.</div>'}`;
+}
+function renderDescStats(items){
+  const tot=items.length, essays=items.filter(i=>i.type==='Essay Writing').length, emails=items.filter(i=>i.type==='Email Writing').length;
+  const avgR=tot?(items.reduce((s,i)=>s+parseFloat(i.rating||0),0)/tot).toFixed(1):'—';
+  document.getElementById('desc-stats').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:center">
+      <div style="padding:12px;border-radius:8px;background:rgba(255,255,255,.03)"><div style="font-family:'Playfair Display',serif;font-size:28px;color:var(--gold)">${tot}</div><div style="font-size:11px;color:var(--cream-dim)">Total Tasks</div></div>
+      <div style="padding:12px;border-radius:8px;background:rgba(255,255,255,.03)"><div style="font-family:'Playfair Display',serif;font-size:28px;color:var(--green)">${avgR}</div><div style="font-size:11px;color:var(--cream-dim)">Avg Rating</div></div>
+      <div style="padding:12px;border-radius:8px;background:rgba(255,255,255,.03)"><div style="font-family:'Playfair Display',serif;font-size:28px;color:var(--blue)">${essays}</div><div style="font-size:11px;color:var(--cream-dim)">Essays</div></div>
+      <div style="padding:12px;border-radius:8px;background:rgba(255,255,255,.03)"><div style="font-family:'Playfair Display',serif;font-size:28px;color:var(--purple)">${emails}</div><div style="font-size:11px;color:var(--cream-dim)">Emails/Letters</div></div>
+    </div>`;
+}
+
+// ═════════════════════════════════════
+// CALENDAR
+// ═════════════════════════════════════
+function renderCalendar(){
+  const y=calDate.getFullYear(), mo=calDate.getMonth();
+  const mons=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cal-title').textContent=mons[mo]+' '+y;
+  const logs=LS.get('studyLogs',[]); const today=new Date();
+  const firstDay=new Date(y,mo,1).getDay(), dim=new Date(y,mo+1,0).getDate();
+  const dayHdrs=['Su','Mo','Tu','We','Th','Fr','Sa'];
+  let html=dayHdrs.map(d=>`<div class="cal-d hd">${d}</div>`).join('');
+  for(let i=0;i<firstDay;i++)html+='<div></div>';
+  for(let d=1;d<=dim;d++){
+    const ds=`${y}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const log=logs.find(l=>l.date===ds);
+    const isTd=today.getDate()===d&&today.getMonth()===mo&&today.getFullYear()===y;
+    let cls='cal-d';
+    if(isTd)cls+=' today';
+    if(log){if(log.dayType==='missed')cls+=' missed';else if(log.hours>=6&&log.dayType==='full')cls+=' studied';else cls+=' partial';}
+    const gym=log?.gym==='yes'?'<span style="position:absolute;bottom:1px;right:2px;font-size:7px">💪</span>':'';
+    html+=`<div class="${cls}" title="${log?log.hours+'h | '+log.dayType:''}">${d}${gym}</div>`;
+  }
+  document.getElementById('month-grid').innerHTML=html;
+  renderMonthStats(y,mo,logs);
+}
+function prevMonth(){calDate.setMonth(calDate.getMonth()-1);renderCalendar();}
+function nextMonth(){calDate.setMonth(calDate.getMonth()+1);renderCalendar();}
+function renderMonthStats(y,mo,logs){
+  const ms=`${y}-${String(mo+1).padStart(2,'0')}`;
+  const ml=logs.filter(l=>l.date.startsWith(ms));
+  const th=ml.reduce((s,l)=>s+(l.hours||0),0);
+  const ad=ml.filter(l=>l.dayType!=='missed').length;
+  const md=ml.filter(l=>l.dayType==='missed').length;
+  const gd=ml.filter(l=>l.gym==='yes').length;
+  const tp=ml.reduce((s,l)=>s+(l.penalty||0),0);
+  document.getElementById('monthly-stats').innerHTML=`
+    <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--cream-dim)">Total Study Hours</span><strong style="color:var(--gold)">${th.toFixed(1)}h</strong></div>
+    <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--cream-dim)">Active Study Days</span><strong style="color:var(--green)">${ad} days</strong></div>
+    <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--cream-dim)">Missed Days</span><strong style="color:var(--red)">${md} days</strong></div>
+    <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--cream-dim)">Gym Sessions</span><strong style="color:var(--blue)">${gd} days</strong></div>
+    <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--cream-dim)">Avg Hours / Day</span><strong>${ad>0?(th/ad).toFixed(1):0}h</strong></div>
+    <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--cream-dim)">Month Penalties</span><strong style="color:${tp>10?'var(--red)':'var(--green)'}">${tp} pts</strong></div>`;
+}
+
+// ═════════════════════════════════════
+// AI INSTRUCTOR
+// ═════════════════════════════════════
+function buildCtx(){
+  const logs=LS.get('studyLogs',[]);
+  const mocks=LS.get('mockScores',[]);
+  const th=logs.reduce((s,l)=>s+(l.hours||0),0).toFixed(1);
+  const tp=logs.reduce((s,l)=>s+(l.penalty||0),0);
+  return`You are BankPrep Pro's AI Instructor — a warm, expert, no-nonsense virtual coach for SBI PO, IBPS PO, SBI Clerk, and IBPS Clerk banking exam aspirants (India, 2026).
+
+EXAM DATES 2026:
+- SBI PO Prelims: ~Aug 1-2, 2026 | Mains: ~Sep 12, 2026
+- IBPS PO Prelims: Aug 22-23, 2026 | Mains: Oct 4, 2026
+- SBI Clerk Prelims: Sep 27/Oct 3, 2026 | Mains: Nov 7, 2026
+- IBPS Clerk Prelims: Oct 10-11, 2026 | Mains: Dec 27, 2026
+
+EXAM PATTERNS:
+- SBI/IBPS PO Prelims: 100Q/100M/60min — English(30Q/20min), Quant(35Q/20min), Reasoning(35Q/20min). Qualifying only. Neg: -0.25.
+- SBI PO Mains: 170Q/200M/180min (obj) + 50M/30min Descriptive (Essay + Letter). Sectional cutoffs.
+- IBPS PO Mains: 155Q/200M/180min (obj) + 25M/30min Descriptive.
+- SBI Clerk Prelims: 100Q/100M/60min. Qualifying only.
+- SBI Clerk Mains: 190Q/200M/160min — 4 sections. No interview.
+- IBPS Clerk Mains: 190Q/200M/160min. No interview.
+
+STUDENT'S PREP DATA (Today: ${new Date().toDateString()}):
+- Total study hours logged: ${th}h
+- Study sessions logged: ${logs.length} days
+- Missed days: ${logs.filter(l=>l.dayType==='missed').length}
+- Total penalty points: ${tp}
+- Total mock tests taken: ${mocks.length}
+- Recent logs (last 5): ${JSON.stringify(logs.slice(0,5))}
+- Recent mock scores (last 5): ${JSON.stringify(mocks.slice(-5))}
+
+YOUR ROLE: Give specific, data-driven, actionable advice. Be motivational but honest. Reference their actual data. Keep responses focused and clear. Use emojis for readability. Speak like a caring coach who believes in them.`;
+}
+
+async function sendChat(){
+  const inp=document.getElementById('chat-inp'), msg=inp.value.trim();
+  if(!msg)return;
+  const key=LS.get('apiKey');
+  if(!key){appendMsg('bot','⚙️ Please add your Anthropic API key in Settings (⚙️ gear icon in the sidebar) to enable AI chat! For now, I\'ve received your question — but I need the API key to respond intelligently. You can get a free key at console.anthropic.com 🔑');return;}
+  inp.value=''; appendMsg('user',msg);
+  chatHistory.push({role:'user',content:msg});
+  document.getElementById('chat-btn').disabled=true;
+  const thinking=appendMsg('bot','🤔 Thinking...');
+  try{
+    const proxy=LS.get('apiProxy','');
+    const url=proxy||'https://api.anthropic.com/v1/messages';
+    const headers={'Content-Type':'application/json'};
+    if(!proxy){headers['x-api-key']=key;headers['anthropic-version']='2023-06-01';}
+    else{headers['x-api-key']=key;}
+    const res=await fetch(url,{method:'POST',headers,body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:900,system:buildCtx(),messages:chatHistory})});
+    const data=await res.json();
+    const botMsg=data.content?.[0]?.text||'Sorry, I had trouble responding. Try again!';
+    thinking.textContent=botMsg;
+    chatHistory.push({role:'assistant',content:botMsg});
+  }catch(e){thinking.textContent='❌ Connection error. Check your API key and internet. If self-hosting, verify your proxy URL in Settings.';}
+  document.getElementById('chat-btn').disabled=false;
+}
+
+function appendMsg(role,txt){
+  const box=document.getElementById('chat-box');
+  const d=document.createElement('div');
+  d.className='cm '+role; d.textContent=txt;
+  box.appendChild(d); box.scrollTop=box.scrollHeight;
+  return d;
+}
+function qp(p){document.getElementById('chat-inp').value=p;sendChat();}
+
+// ═════════════════════════════════════
+// EXAM PATTERN REF
+// ═════════════════════════════════════
+function renderExamPatRef(){
+  document.getElementById('exam-pat-ref').innerHTML=PATTERNS.map(p=>`
+    <div style="margin-bottom:10px;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,.03)">
+      <div style="font-weight:600;color:var(--gold);margin-bottom:6px;font-size:12.5px">${p.e}</div>
+      ${p.secs.map(s=>`<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--cream-dim);margin-bottom:2px"><span>${s.n}</span><span>${s.q}Q · ${s.m}M · ${s.t}min</span></div>`).join('')}
+      <div style="padding-top:5px;margin-top:4px;border-top:1px solid rgba(255,255,255,.06);font-size:11px;color:var(--cream);font-weight:600">Total: ${p.tot.q}Q · ${p.tot.m}M · ${p.tot.t}min</div>
+      ${p.desc?`<div style="font-size:10.5px;color:var(--gold);margin-top:3px">📝 ${p.desc}</div>`:''}
+      ${p.note?`<div style="font-size:10.5px;color:var(--cream-dim);margin-top:2px">${p.note}</div>`:''}
+    </div>`).join('');
+}
+
+// ═════════════════════════════════════
+// SETTINGS
+// ═════════════════════════════════════
+function loadSettings(){
+  document.getElementById('s-name').value=LS.get('userName','');
+  document.getElementById('s-apikey').value=LS.get('apiKey','');
+  document.getElementById('s-goal').value=LS.get('studyGoal',8);
+  document.getElementById('s-proxy').value=LS.get('apiProxy','');
+  document.getElementById('api-notice').style.display=LS.get('apiKey')?'none':'block';
+}
+function saveSettings(){
+  LS.set('userName',document.getElementById('s-name').value);
+  LS.set('apiKey',document.getElementById('s-apikey').value);
+  LS.set('studyGoal',parseFloat(document.getElementById('s-goal').value));
+  LS.set('apiProxy',document.getElementById('s-proxy').value);
+  closeSettings(); setGreeting(); toast('✅ Settings saved!');
+  document.getElementById('api-notice').style.display=LS.get('apiKey')?'none':'block';
+}
+function openSettings(){document.getElementById('settings-overlay').classList.add('open');}
+function closeSettings(){document.getElementById('settings-overlay').classList.remove('open');}
+document.getElementById('settings-overlay').addEventListener('click',function(e){if(e.target===this)closeSettings();});
+
+// ═════════════════════════════════════
+// TOAST
+// ═════════════════════════════════════
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.style.display='block';
+  setTimeout(()=>t.style.display='none',3000);
+}
+</script>
+</body>
+</html>
